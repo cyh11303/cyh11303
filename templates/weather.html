@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>단기예보</title>
+<h2>오늘을 포함한 3일동안의 동대문구의 기온입니다.</h2>
+    <h3>특정날짜의 기온만 보고싶다면 20230709과 같이 검색해주세요.</h3>
+</head>
+<body>
+<a href="/" >전체날짜보기</a>
+
+<form method="GET" action="/method_get">
+    <input type="text" name="date1" >
+    <input type="submit" value="submit" />
+</form>
+<script  type="text/javascript">
+    {#weather.py에서 반환한 json형식의 date, time, temp 를 js에서 사용하기위해 {{ 변수 |tojson }}의 형태로 객체 선언#}
+    var date={{ date|tojson }};
+    {#console.log(Object.values(date));는 json형식인 date를 array의 형태로 콘솔에 출력할 수 있도록 함#}
+    console.log(Object.values(date));
+    var time={{ time|tojson }};
+    console.log(Object.values(time));
+    var temp={{ temp|tojson }};
+    document.write('<table style="width: 100%">');
+    document.write('<tr>');
+    document.write('<th>날짜</th>');
+    document.write('<th>시간</th>');
+    document.write('<th>온도</th>');
+    document.write('</tr>');
+    {#객체의 길이를 직접적으로 알 수 없어서 Object.keys(date)를 이용하여 총 키의 갯수를 객체의 길이로 대체하여 반복문에 넣어주었다. 참고 https://developer-talk.tistory.com/813 #}
+    for (var  i=1; i<Object.keys(date).length; i++) {
+        document.write('<tr>');
+        document.write('<td  style="text-align:center">');
+        document.write(date[i]);
+        document.write('</td>');
+        document.write('<td  style="text-align:center">');
+        document.write(time[i]);
+        document.write('</td>');
+        document.write('<td  style="text-align:center">');
+        document.write(temp[i]);
+        document.write('</td>');
+        document.write('</tr>');
+    }
+    document.write('</table>');
+</script>
+
+</body>
+</html>
