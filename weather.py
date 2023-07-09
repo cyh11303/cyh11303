@@ -33,7 +33,7 @@ def index():  # put application's code here
         # print(initDate)
         # print(initTime)
         # api url의 https 형식으로 불러올 시 열리지않는 문제가 생김
-        api = f"http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=k2FhBBQxor2i%2B9pBvFADgh%2B6ld8CDQul1g46DdYsfyg40rzqKGlBNpHWPcgV88Nj0FFBbu2iFfC24Q3cNzUCXg%3D%3D&pageNo=1&numOfRows=1000&dataType=json&base_date={initDate}&base_time={initTime}&nx=55&ny=127"
+        api = f"http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=자신의 API키&pageNo=1&numOfRows=1000&dataType=json&base_date={initDate}&base_time={initTime}&nx=55&ny=127"
         # 이를 해결하기위해 api의 https를 http로 바꿔준 후 requests.get()에서 verify=False를 이용하여 HTTPS 요청에 대한 SSL 인증 확인과정을 없앴음 (참고: https://seculog.tistory.com/9)
         result = requests.get(api, verify=False)
         # api에서 json형식의 데이터를 받아옴
@@ -90,7 +90,7 @@ def method_get():  # put application's code here
                 else:
                         initTime = "2300"
 
-                api = f"http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=k2FhBBQxor2i%2B9pBvFADgh%2B6ld8CDQul1g46DdYsfyg40rzqKGlBNpHWPcgV88Nj0FFBbu2iFfC24Q3cNzUCXg%3D%3D&pageNo=1&numOfRows=1000&dataType=json&base_date={initDate}&base_time={initTime}&nx=61&ny=127"
+                api = f"http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=자신의 API키&pageNo=1&numOfRows=1000&dataType=json&base_date={initDate}&base_time={initTime}&nx=61&ny=127"
                 result = requests.get(api, verify=False)
                 result = json.loads(result.text)
                 arr = result["response"]["body"]["items"]["item"]

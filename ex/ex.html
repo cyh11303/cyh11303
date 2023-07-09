@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>날씨 출력</title>
+</head>
+<body>
+<h2>날짜: {{ date }}</h2>
+<h2>시간: {{ time }}</h2>
+<h2>온도: {{ temp }}</h2>
+<form method="GET" action="/method_get_act">
+  <input name="Submit1" type="submit" value="submit" />
+</form>
+<script>
+
+</script>
+<table style="width: 70%">
+    <tr>
+{#        tableHTMl 사용해보기( js안에서 동작 하므로 파이썬 변수 -> js로 전달 후 사용)#}
+{#        $getJson을 사용해서 넘기는것도 고려 #}
+
+        <th>날짜</th>
+            {%  for j in date %}
+        <td  style="text-align:center">{{ j }}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <th>시간</th>
+                {%  for k in time %}
+        <td  style="text-align:center">{{ k }}</td>
+    {% endfor %}
+    </tr>
+    <tr>
+        <th>온도</th>
+    {%  for l in temp %}
+        <td  style="text-align:center">{{ l }}</td>
+     {% endfor %}
+    </tr>
+</table>
+</body>
+</html>

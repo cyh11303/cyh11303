@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>기상청 날씨</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha512-t4GWSVZO1eC8BM339Xd7Uphw5s17a86tIZIj8qRxhnKub6WoyhnrxeCIMeAqBPgdZGlCcG2PrZjMc+Wr78+5Xg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+</head>
+<body>
+    <div class="container">
+        <h1>기상청 날씨</h1>
+        <h2>동대문구 날씨</h2>
+        <p class="result">
+        </p>
+        <!-- XML대신 JSON으로 체크 필수 -->
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <form action="#">
+            <label for="datepick">날짜 선택</label>
+            <input type="text" id="datepick"/>
+            <button>조회</button>
+        </form>
+        <script>
+            // 기상청 날씨 예보가 최근 3일간의 데이터만 제공이 되므로
+            $("#datepick").datepicker({
+              dateFormat: "yymmdd",
+                minDate: "-2d",
+                maxDate: "d",
+            });
+            // 금일 날짜가 디폴트 값으로 폼에 등록이 됨
+            // 선택된 날짜를 initDate에 저장하고 콘솔에 출력
+            $("#datepick").datepicker( "setDate", new Date());
+
+            let initDate = $("#datepick").val();
+            console.log(initDate);
+
+            $("form").submit(() => {
+                let tDate = $("#datepick").val();
+                initDate = tDate;
+                weather(initDate);
+            });
+            function weather(initDate) {
+                $.ajax({
+                    url: `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst?serviceKey=k2FhBBQxor2i%2B9pBvFADgh%2B6ld8CDQul1g46DdYsfyg40rzqKGlBNpHWPcgV88Nj0FFBbu2iFfC24Q3cNzUCXg%3D%3D&pageNo=1&numOfRows=1000&dataType=JSON&base_date=${initDate}&base_time=0130&nx=61&ny=127`,
+                    success: function (result) {
+                        console.log(result);
+                        let items = result.response.body.items.item;
+                        /* let filteredItems = [];
+                        for (let i=0; i<items.length; i++) {
+                            if (items[i].category == 'TMP') {
+                                filteredItems.push(items[i]);
+                            }
+                        } */
+                        let filteredItems = items.filter((item) => {
+                            return item.category == "T1H";
+                        });
+                        makeTable(filteredItems);
+                    },
+                });
+            }
+            weather(initDate);
+
+            function makeTable(src) {
+                let tableHTML = "";
+                src.forEach((item) => {
+                    tableHTML += `
+                    <tr>
+                        <td>${item.fcstDate}</td>
+                        <td>${item.fcstTime}</td>
+                        <td>${item.fcstValue}</td>
+                    </tr>`;
+                });
+                $("table tbody").html(tableHTML);
+            }
+        </script>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>날짜</th>
+                    <th>시간</th>
+                    <th>온도</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="3">조회 내용이 없습니다.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
